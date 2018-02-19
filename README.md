@@ -1,4 +1,4 @@
-# Вступительное задание для [Java Online Projects](http://javaops.ru/) по курсу [JavaRush](https://javarush.ru/) </br>
+# Вступительное задание для [JavaRush](https://javarush.ru/) </br>
 ##**CRUD** (create, read, update, delete)
 
 У вас есть всего 1 таблица book. В ней хранится список книг (например, на книжной
