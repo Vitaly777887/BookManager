@@ -1,12 +1,11 @@
-Требуемые технологии:
-  Maven
-  Tomcat 8
-  Spring
-  Hibernate
-  MySQL
-  Frontend: Spring MVC
+Технологии: 
+*	Maven (для сборки проекта)
+*	Hibernate (для маппинга сущностей приложения на БД, и работы с БД)
+*	Tomcat 7
+*	Mysql. Имя базы test, с логином и паролем root
+*	Frontend: Spring MVC
 
-1. CRUD (create, read, update, delete).
+CRUD (create, read, update, delete).
 У вас есть всего 1 таблица book. В ней хранится список книг (например, на книжной
 полке). Книги на полку можно добавлять (create), брать посмотреть (read), заменять на новый
 выпуск (update), убирать (delete).
