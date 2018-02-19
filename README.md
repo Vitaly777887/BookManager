@@ -1,10 +1,10 @@
 Требуемые технологии:
-• Maven
-• Tomcat 8 
-• Spring 
-• Hibernate 
-• MySQL
-• Frontend: Spring MVC
+  Maven
+  Tomcat 8
+  Spring
+  Hibernate
+  MySQL
+  Frontend: Spring MVC
 
 1. CRUD (create, read, update, delete).
 У вас есть всего 1 таблица book. В ней хранится список книг (например, на книжной
