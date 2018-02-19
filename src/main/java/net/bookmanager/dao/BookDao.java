@@ -5,15 +5,15 @@ import net.bookmanager.model.Book;
 import java.util.List;
 
 public interface BookDao {
-    public void addBook(Book book);
+    void addBook(Book book);
 
-    public void updateBook(Book book);
+    void updateBook(Book book);
 
-    public void removeBook(int id);
+    void removeBook(int id);
 
     void isReadAlready(int id);
 
-    public Book getBookById(int id);
+    Book getBookById(int id);
 
-    public List<Book> listBooks();
+    List<Book> listBooks();
 }

@@ -1,11 +1,10 @@
-<%@ page import="net.bookmanager.service.BookServiceImpl" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
+
 <%@ page session="false" %>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
 <html>
@@ -52,36 +51,48 @@
         }
     </style>
 </head>
-<body>
-<a href="../../index.jsp">Back to main menu</a>
+<body vlink="#0000FF" background="66FF00">
+<a href="../../index.jsp">На главное меню</a>
 
 <br/>
 <br/>
 
-<form action="/books?page=1">
-    <div class="row">
-        <div class="col-md-2">Search users by name:</div>
-        <div class="col-md-2"><input type="text" name="searchName" id="searchName"
-                                     placeholder="type name here.."></div>
-        <div class="col-md-2"><input class="btn btn-xs" type='submit' value='Search'/></div>
+<form:form action="/books">
+    <div>
+        <h3>Поиск книг по названию:</h3>
+        <input type="text" name="searchName" id="searchName" value="${searchName}">
+        <div>
+            <h5>Только непрочитанные книги</h5>
+            <input type="checkbox" name="isNotReadAlready" id="isNotReadAlready">
+        </div>
+        <input class="btn btn-xs" type='submit' value='Search'/>
     </div>
-</form>
-<h1>Book List</h1>
+</form:form>
+<h1 align="center">Список книг</h1>
 
 <c:if test="${!empty listBooks}">
+    <h4>Всего найдено: ${booksSearch}</h4>
 
+    <form:form action="/books?isNotReadAlready=${isNotReadAlready}&searchName=${searchName}">
+        <button name="page" value="${page-1} "
+                <c:if test="${page <=1}">disabled="disabled"</c:if>  >
+            <h4> < </h4></button>
+        <button name="page" value="${page+1}"
+                <c:if test="${page >=maxPages}">disabled="disabled"</c:if> >
+            <h4> > </h4></button>
+    </form:form>
     <table class="tg">
         <tr>
 
-            <th width="120">Title</th>
-            <th width="120">Description</th>
-            <th width="120">Author</th>
+            <th width="120">Название</th>
+            <th width="120">Описание</th>
+            <th width="120">Автор</th>
             <th width="120">IBSN</th>
-            <th width="120">Print year</th>
-            <th width="120">Is read already</th>
-            <th width="60">isReadAlready</th>
-            <th width="60">Edit</th>
-            <th width="60">Delete</th>
+            <th width="120">Год печати</th>
+            <th width="120">Прочитана</th>
+            <th width="60">Пометить как прочитанную</th>
+            <th width="60">Изменить</th>
+            <th width="60">Удалить</th>
         </tr>
         <c:forEach items="${listBooks}" var="book">
             <tr>
@@ -94,40 +105,32 @@
                 <td><a href="/isReadAlready/${book.id}?page=${page}">isReadAlready</a></td>
                 <td><a href="<c:url value='/edit/${book.id}?page=${page}'/>">Edit</a></td>
                 <td><a href="<c:url value='/remove/${book.id}?page=${page}'/>">Delete</a></td>
-
             </tr>
         </c:forEach>
     </table>
-    <h4>всего найдено ${pagesSerch}</h4>
 
-    <form >
-        <button name="page" value="${page-1}" <c:if test="${page <=1}">disabled="disabled"</c:if>  > <h2><</h2></button>
-        <button name="page" value="${page+1}"  <c:if test="${page >=maxPages}">disabled="disabled"</c:if> > <h2>></h2></button>
-    </form>
 </c:if>
-
-
 
 
 <c:if test="${!empty book.title}">
-    <h1>Edit a Book</h1>
+    <h1>Изменить книгу</h1>
 </c:if>
 <c:if test="${empty book.title}">
-    <h1>Add a Book</h1>
+    <h1>Добавить книгу</h1>
 </c:if>
-
 <c:url var="addAction" value="/books/add?page=${page}"/>
 
 <form:form action="${addAction}" commandName="book">
     <table>
+        <!-- если убрать id то не работает изменение книги-->
         <tr>
             <td>
                 <form:label path="id">
-                    <spring:message text="id"/>
+                    <spring:message text="Id"/>
                 </form:label>
             </td>
             <td>
-                <form:input path="id"/>
+                <form:input path="id" readonly="true"/>
             </td>
         </tr>
         <tr>
@@ -136,8 +139,18 @@
                     <spring:message text="Title"/>
                 </form:label>
             </td>
+
             <td>
-                <form:input path="title" />
+                <c:if test="${!empty book.title}">
+                    <c:set var="g" value="true"/>
+
+                </c:if>
+
+                <c:if test="${ empty book.title}">
+                    <c:set var="g" value="false"/>
+
+                </c:if>
+                <form:input path="title" readonly="${g}"/>
             </td>
         </tr>
         <tr>
@@ -158,6 +171,8 @@
             </td>
             <td>
                 <form:input path="author"/>
+
+
             </td>
         </tr>
         <tr>
@@ -182,18 +197,16 @@
         </tr>
         <tr>
             <td colspan="2">
-            <c:if test="${!empty book.title}">
-                <input type="submit"
-                       value="<spring:message text="Edit Book"/>"/>
-            </c:if>
-            <c:if test="${empty book.title}">
-                <input type="submit"
-                       value="<spring:message text="Add Book"/>"/>
-            </c:if>
-        </td>
+                <c:if test="${!empty book.title}">
+                    <input type="submit"
+                           value="<spring:message text="Изменить"/>"/>
+                </c:if>
+                <c:if test="${empty book.title}">
+                    <input type="submit"
+                           value="<spring:message text="Добавить"/>"/>
+                </c:if>
+            </td>
         </tr>
-
-
 
 
     </table>

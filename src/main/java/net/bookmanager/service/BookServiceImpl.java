@@ -35,17 +35,19 @@ public class BookServiceImpl implements BookService {
     public void removeBook(int id) {
         this.bookDao.removeBook(id);
     }
+
     @Override
     @Transactional
     public void isReadAlready(int id) {
         this.bookDao.isReadAlready(id);
     }
 
+    @Override
     @Transactional
-    public List<Book> currentListBooks(String name) {
-        List<Book> list =new ArrayList<Book>();
-        for (Book book :bookDao.listBooks()) {
-            if (book.getDescription().contains(name))
+    public List<Book> listBooksWithTitle(String title) {
+        List<Book> list = new ArrayList<Book>();
+        for (Book book : bookDao.listBooks()) {
+            if (book.getTitle().contains(title))
                 list.add(book);
         }
 
@@ -54,13 +56,30 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> pageListBooks(int page, String searchName) {
+    public List<Book> allNotReadBook(List<Book> list) {
+        List<Book> res = new ArrayList<>();
+        for (Book book : list)
+            if (!book.isReadAlready()) res.add(book);
+        return res;
+    }
 
-        List<Book> list ;
-        if(searchName!=null) list=currentListBooks(searchName);
+    @Override
+    @Transactional
+    public List<Book> pageListBooks(int page, String searchName, boolean isNotReadAlready) {
 
-        else list =bookDao.listBooks();
-        return list.subList(MAXLINES*(page-1),MAXLINES*page);
+        List<Book> list1;
+        if (searchName != null) list1 = listBooksWithTitle(searchName);
+        else list1 = bookDao.listBooks();
+
+        List<Book> list = new ArrayList<>();
+        if (isNotReadAlready) {
+            list = allNotReadBook(list);
+        } else list.addAll(list1);
+        if (list.size() > MAXLINES)
+            if (MAXLINES * page < list.size()) return list.subList(MAXLINES * (page - 1), MAXLINES * page);
+            else return list.subList(MAXLINES * (page - 1), list.size());
+
+        return list;
     }
 
     @Override

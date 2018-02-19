@@ -2,6 +2,7 @@ package net.bookmanager.model;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -10,8 +11,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-
     @Column(name = "title")
     private String title;
 
@@ -19,16 +18,17 @@ public class Book {
     private String description;
 
     @Column(name = "author")
-    private String  author;
+    private String author;
 
     @Column(name = "isbn")
-    private String  isbn;
+    private String isbn;
+
 
     @Column(name = "printYear")
-    private int  printYear;
+    private int printYear;
 
     @Column(name = "readAlready")
-    private boolean  readAlready;
+    private boolean readAlready;
 
 
     public Book() {
@@ -99,5 +99,19 @@ public class Book {
         this.readAlready = readAlready;
     }
 
+   /* @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Book book = (Book) o;
+
+        return id == book.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+    */
 }

@@ -5,6 +5,6 @@ CREATE TABLE `books` (
   `author` varchar(100) NOT NULL,
   `isbn` varchar(20) NOT NULL,
   `printYear` int(11) NOT NULL,
-  `readAlready` tinyint(4) NOT NULL,
+  `readAlready` tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
